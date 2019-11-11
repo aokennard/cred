@@ -6,6 +6,25 @@ struct gamestate {
     int player_y;
 
     player player_data;
+
+    region current_region; 
+};
+
+struct region {
+    int region_index; // array of map data somewhere
+    tile region_tiles[MAX_REGION_ROWS][MAX_REGION_COLS];
+}
+
+struct tile {
+    sprite tile_sprite;
+    int collisions;
+    char* (*tile_interact)(gamestate* current_stat); // might output a message, or do nothing if background
+};
+
+// TODO add character sprite structures
+
+struct sprite {
+    int sprite_index; // this, or just a bit array / image?
 };
 
 struct player {
@@ -22,7 +41,7 @@ struct items {
 
 struct item {
     char* item_name;
-    // function pointer that modifies the gamestate
+
     void (*item_effect)(gamestate* current_state);
 };
 
@@ -53,7 +72,7 @@ struct move {
     int is_hm;
     int damage;
     int accuracy;
-    // probably a function pointer taking in a pokemon and outputting another pokemon
+
     void (*move_effect)(pokemon* attacked_pkmn);
 }
 

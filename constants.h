@@ -3,3 +3,6 @@
 #define NUM_BADGES 8
 #define MAX_MOVES 4
 #define NUM_POKEMON 151
+
+#define MAX_REGION_ROWS 500
+#define MAX_REGION_COLS 500
