@@ -2,34 +2,39 @@
 
 
 struct gamestate {
-    int player_x;
-    int player_y;
+    position player_posn;
 
     player player_data;
 
-    region current_region; 
+    area current_area; 
 };
 
-struct region {
-    int region_index; // array of map data somewhere
-    tile region_tiles[MAX_REGION_ROWS][MAX_REGION_COLS];
+struct area {
+    int area_index; // array of map data somewhere
+    tile area_tiles[MAX_AREA_ROWS][MAX_AREA_COLS];
+}
+
+struct map_areas { // probably make it so a map area can just be preprocessor included
+    string area_names[MAX_AREAS];
+    area areas[MAX_AREAS];
 }
 
 struct tile {
     sprite tile_sprite;
     int collisions;
-    char* (*tile_interact)(gamestate* current_stat); // might output a message, or do nothing if background
+    dialogue (*tile_interact)(gamestate* current_stat); // might output a message, or do nothing if background
 };
 
 // TODO add character sprite structures
 
 struct sprite {
     int sprite_index; // this, or just a bit array / image?
+    int sprite_direction; // up down left right, can be used as an offset from sprite_index to get directional sprite
 };
 
-struct trainer_sprite {
-    int sprite_index; // this, or just a bit array / image?
-};
+struct sprites {
+    sprite game_sprites[MAX_SPRITES];
+}
 
 struct player {
     pokedex* pokedex_data;
@@ -38,10 +43,34 @@ struct player {
     badges badge_data;
 };
 
+struct npc {
+    int npc_id;
+    int is_trainer;
+    position npc_position;
+
+    dialogue npc_text;
+    sprite npc_sprite;
+
+    trainer* trainer_npc;
+    
+};
+
+struct dialogue {
+    string dialogue_text[MAX_DIALOGUE_STRINGS];
+    int (*dialogue_react)(string user_input); // index of next dialogue to go to, after input
+};
+
+struct string {
+    char* string;
+    int strlen;
+};
+
+struct position {
+    int x, y;
+};
+
 struct trainer { // includes npcs
     pokemon party_data[MAX_POKEMON_PARTY];
-    trainer_sprite sprite_data;
-    // possibly dialogue for npcs?
 };
 
 struct items {
@@ -50,7 +79,7 @@ struct items {
 };
 
 struct item {
-    char* item_name;
+    string item_name;
 
     void (*item_effect)(gamestate* current_state);
 };
@@ -60,7 +89,7 @@ struct badges {
 };
 
 struct badge {
-    char* badge_name;
+    string badge_name;
     int badge_won;
 };
 
@@ -77,7 +106,7 @@ struct moveset {
 };
 
 struct move {
-    char* move_name;
+    string move_name;
     pokemon_type move_type;
     int is_hm;
     int damage;
@@ -105,7 +134,7 @@ struct pokemon_stats {
 };
 
 struct pokemon_phenotype {
-    char* pkmn_name;
+    string pkmn_name;
     pokemon_type pkmn_primary_type;
     pokemon_type pkmn_secondary_type;
     pokemon_impl_statrange pkmn_statrange;
