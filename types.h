@@ -27,11 +27,21 @@ struct sprite {
     int sprite_index; // this, or just a bit array / image?
 };
 
+struct trainer_sprite {
+    int sprite_index; // this, or just a bit array / image?
+};
+
 struct player {
     pokedex* pokedex_data;
-    pokemon party_data[MAX_POKEMON_PARTY];
+    trainer trainer_data;
     items* player_bag;
     badges badge_data;
+};
+
+struct trainer { // includes npcs
+    pokemon party_data[MAX_POKEMON_PARTY];
+    trainer_sprite sprite_data;
+    // possibly dialogue for npcs?
 };
 
 struct items {
