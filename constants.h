@@ -1,0 +1,5 @@
+#define MAX_POKEMON_PARTY 6
+#define MAX_ITEMS 128
+#define NUM_BADGES 8
+#define MAX_MOVES 4
+#define NUM_POKEMON 151
