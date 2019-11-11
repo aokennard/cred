@@ -10,3 +10,5 @@
 #define MAX_AREA_ROWS 500
 #define MAX_AREA_COLS 500
 #define MAX_AREAS 128
+#define TILE_X_SIZE 50
+#define TILE_Y_SIZE 50

@@ -30,10 +30,16 @@ struct tile {
 struct sprite {
     int sprite_index; // this, or just a bit array / image?
     int sprite_direction; // up down left right, can be used as an offset from sprite_index to get directional sprite
+    sprite_data* sprite_data_ptr; // just update ptr when changing things
+
 };
 
+struct sprite_data {
+    color sprite_colors[TILE_X_SIZE][TILE_Y_SIZE];
+}
+
 struct sprites {
-    sprite game_sprites[MAX_SPRITES];
+    sprite_data game_sprites[MAX_SPRITES];
 }
 
 struct player {
@@ -80,7 +86,8 @@ struct items {
 
 struct item {
     string item_name;
-
+    int item_amount;
+    int key_item;
     void (*item_effect)(gamestate* current_state);
 };
 
