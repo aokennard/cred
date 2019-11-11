@@ -23,6 +23,7 @@ struct items {
 struct item {
     char* item_name;
     // function pointer that modifies the gamestate
+    void (*item_effect)(gamestate* current_state);
 };
 
 struct badges {
@@ -53,6 +54,7 @@ struct move {
     int damage;
     int accuracy;
     // probably a function pointer taking in a pokemon and outputting another pokemon
+    void (*move_effect)(pokemon* attacked_pkmn);
 }
 
 struct pokemon_implicit_stats {
