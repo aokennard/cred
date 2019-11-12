@@ -27,9 +27,13 @@ typedef struct pokemon_stats pokemon_stats;
 typedef struct pokemon_phenotype pokemon_phenotype;
 typedef struct pokedex pokedex;
 typedef struct pokedex_entry pokedex_entry;
+typedef struct pokemon_move_data pokemon_move_data;
+typedef struct route_encounter_rates route_encounter_rates;
+
+
 
 /*
-    Current pokemon / move types
+    Current pokemon / move types -- make a lookup table for weaknesses
 */
 
 typedef enum {
@@ -73,10 +77,17 @@ struct pokemon_stats {
 };
 
 /*
+
+*/
+struct route_encounter_rates {
+    float biome_encounters[NUM_BIOMES][NUM_POKEMON]; // for a given area, the tile 'biome' for a given pokemon if nonzero is the encounter rate
+};
+
+/*
     Stores dialogue for a given object (NPC or otherwise), as well as input handler for user interactions
 */
 struct dialogue {
-    string dialogue_text[MAX_DIALOGUE_STRINGS];
+    string dialogue_text[MAX_DIALOGUE_STRINGS]; // TODO VLA?
     int (*dialogue_react)(string user_input); // index of next dialogue to go to, after input
 };
 
@@ -94,7 +105,7 @@ struct item {
     Stores items as the player would have in their bag, and the current index of what the bag is at
 */
 struct items {
-    item item_bag[MAX_ITEMS];
+    item item_bag[MAX_ITEMS]; // TODO VLA?
     int current_item_index;
 };
 
@@ -130,15 +141,12 @@ struct pokedex_entry {
     Represents the player's pokedex - entries, the current index, and caught/seen pokemon
 */
 struct pokedex {
-    pokedex_entry pokemon_list[NUM_POKEMON];
+    pokedex_entry pokemon_list[NUM_POKEMON]; // TODO VLA?
     int current_pkmn_index;
     int caught_pokemon;
     int seen_pokemon;
 };
 
-struct pokemon_move_data {
-
-};
 
 /*
     Stores a specific move, the damage type, other stats about it, and the effect it has on a pokemon
@@ -153,6 +161,15 @@ struct move {
 
     void (*move_effect)(pokemon* attacked_pkmn);
 };
+
+/*
+    Stores the moves a pokemon can learn for a given pokemon
+*/
+struct pokemon_move_data {
+    move learnable_moves[MAX_MOVES]; // should be a set -- TODO VLA
+    move level_to_moves[MAX_POKEMON_LEVEL]; 
+};
+
 
 /*
     Stores the moves for a pokemon, and how much pp each has
@@ -170,6 +187,7 @@ struct pokemon {
     moveset pkmn_moves;
     pokemon_implicit_stats pkmn_hidden_stats; // IVS and such
     pokemon_stats pkmn_stats; // hp, atk def etc
+    pokemon_move_data possible_moves;
 };
 
 /*
@@ -198,6 +216,20 @@ struct sprite {
 };
 
 /*
+    Contains data on an NPC
+    Stores the id of an npc (could be used to look up name and sprite, etc), dialogue it may have, its sprite, and trainer data if not null
+    Possibly store data on items they use in battle or etc later
+*/
+struct npc {
+    int npc_id;
+    string npc_name;
+    position npc_position;
+    dialogue npc_text;
+    sprite npc_sprite;
+    trainer* trainer_npc;
+};
+
+/*
     Stores a given tile's data in an area.
     This includes whether an entity can bump into it, its sprite, and any interactions with the tile
     Can be encounter tile thats passive or something that you can click on
@@ -207,13 +239,17 @@ struct tile {
     int collisions;
     void (*passive_interact)(gamestate* current_state); // encounter tiles and the like
     dialogue (*tile_interact)(gamestate* current_state); // when clicking on tile: might output a message, or do nothing if background
+    union tile_entities {
+        npc person_entity;
+        item floor_item;
+    } tile_entities;
 };
 
 /*
     Stores the player's badges
 */
 struct badges {
-    badge player_badges[NUM_BADGES];
+    badge player_badges[NUM_BADGES]; // TODO VLA
 };
 
 /*
@@ -221,6 +257,7 @@ struct badges {
     Contains what they have for the pokedex, their party data, their items and badges
 */
 struct player {
+    string player_name;
     pokedex* pokedex_data;
     trainer trainer_data;
     items* player_bag;
@@ -237,6 +274,7 @@ struct player {
 struct area {
     int dirty;
     int area_index; // index for map_areas structure
+    route_encounter_rates* encounter_probs;
     tile area_tiles[MAX_AREA_ROWS][MAX_AREA_COLS];
 };
 
@@ -272,18 +310,6 @@ struct sprite_data {
     Should be loaded in from file, never changes
 */
 struct sprites {
-    sprite_data game_sprites[MAX_SPRITES];
+    sprite_data game_sprites[MAX_SPRITES]; // TODO VLA
 };
 
-/*
-    Contains data on an NPC
-    Stores the id of an npc (could be used to look up name and sprite, etc), dialogue it may have, its sprite, and trainer data if not null
-    Possibly store data on items they use in battle or etc later
-*/
-struct npc {
-    int npc_id;
-    position npc_position;
-    dialogue npc_text;
-    sprite npc_sprite;
-    trainer* trainer_npc;
-};

@@ -3,6 +3,7 @@
 #define NUM_BADGES 8
 #define MAX_MOVES 4
 #define NUM_POKEMON 151
+#define MAX_POKEMON_LEVEL 100
 
 #define MAX_DIALOGUE_STRINGS 30
 #define MAX_SPRITES 4096
@@ -12,3 +13,4 @@
 #define MAX_AREAS 128
 #define TILE_X_SIZE 50
 #define TILE_Y_SIZE 50
+#define NUM_BIOMES 24
