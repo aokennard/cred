@@ -1,34 +1,14 @@
 #include "constants.h"
 
-typedef struct position position;
-typedef struct string string;
-typedef struct color color;
-typedef struct gamestate gamestate;
-typedef struct area area;
-typedef struct map_areas map_areas;
-typedef struct tile tile;
-typedef struct sprite sprite;
-typedef struct sprite_data sprite_data;
-typedef struct sprites sprites;
-typedef struct player player;
-typedef struct npc npc;
-typedef struct dialogue dialogue;
-typedef struct trainer trainer;
-typedef struct items items;
-typedef struct item item;
-typedef struct badges badges;
-typedef struct badge badge;
-typedef struct pokemon pokemon;
-typedef struct moveset moveset;
-typedef struct move move;
-typedef struct pokemon_implicit_stats pokemon_implicit_stats;
-typedef struct pokemon_impl_statrange pokemon_impl_statrange;
-typedef struct pokemon_stats pokemon_stats;
-typedef struct pokemon_phenotype pokemon_phenotype;
-typedef struct pokedex pokedex;
-typedef struct pokedex_entry pokedex_entry;
-typedef struct pokemon_move_data pokemon_move_data;
-typedef struct route_encounter_rates route_encounter_rates;
+#include "typedefs.h"
+
+// TODO globals needed:
+// char* array of all dialogue strings
+// gamestate structure
+// sprites?
+// map_areas
+
+
 
 
 
@@ -84,11 +64,12 @@ struct route_encounter_rates {
 };
 
 /*
-    Stores dialogue for a given object (NPC or otherwise), as well as input handler for user interactions
+    Stores dialogue indices for a given object (NPC or otherwise), as well as input handler for user interactions
 */
-struct dialogue {
-    string dialogue_text[MAX_DIALOGUE_STRINGS]; // TODO VLA?
-    int (*dialogue_react)(string user_input); // index of next dialogue to go to, after input
+struct dialogue { // possibly rework so theres a global dialogue array and NPC's have indexs into them, so we save repeated messages
+    int dialogue_indices[MAX_DIALOGUE_STRINGS]; // TODO VLA? -- each element is index into array of all dialogue
+    int (*dialogue_react)(string user_input, int index); // index of next dialogue to go to (in dialogue_indices), after input + current loc
+    int current_dialogue;
 };
 
 /*
@@ -118,10 +99,33 @@ struct pokemon_impl_statrange {
 };
 
 /*
+    Stores a specific move, the damage type, other stats about it, and the effect it has on a pokemon
+*/
+struct move {
+    string move_name;
+    pokemon_type move_type;
+    int is_hm;
+    int damage;
+    int accuracy;
+    int max_pp;
+
+    void (*move_effect)(pokemon* attacked_pkmn);
+};
+
+/*
+    Stores the moves a pokemon can learn for a given pokemon
+*/
+struct pokemon_move_data {
+    move learnable_moves[MAX_MOVES]; // should be a set -- TODO VLA
+    move level_to_moves[MAX_POKEMON_LEVEL]; 
+};
+
+/*
     Represents a pokemon - its name, types, and stats. Probably more later.
 */
 struct pokemon_phenotype {
     string pkmn_name;
+    pokemon_move_data possible_moves;
     pokemon_type pkmn_primary_type;
     pokemon_type pkmn_secondary_type;
     pokemon_impl_statrange pkmn_statrange;
@@ -147,30 +151,6 @@ struct pokedex {
     int seen_pokemon;
 };
 
-
-/*
-    Stores a specific move, the damage type, other stats about it, and the effect it has on a pokemon
-*/
-struct move {
-    string move_name;
-    pokemon_type move_type;
-    int is_hm;
-    int damage;
-    int accuracy;
-    int max_pp;
-
-    void (*move_effect)(pokemon* attacked_pkmn);
-};
-
-/*
-    Stores the moves a pokemon can learn for a given pokemon
-*/
-struct pokemon_move_data {
-    move learnable_moves[MAX_MOVES]; // should be a set -- TODO VLA
-    move level_to_moves[MAX_POKEMON_LEVEL]; 
-};
-
-
 /*
     Stores the moves for a pokemon, and how much pp each has
 */
@@ -187,7 +167,6 @@ struct pokemon {
     moveset pkmn_moves;
     pokemon_implicit_stats pkmn_hidden_stats; // IVS and such
     pokemon_stats pkmn_stats; // hp, atk def etc
-    pokemon_move_data possible_moves;
 };
 
 /*
@@ -223,8 +202,9 @@ struct sprite {
 struct npc {
     int npc_id;
     string npc_name;
+    int line_of_sight; // how far they can see for walking to challenge - used when building tiles?
     position npc_position;
-    dialogue npc_text;
+    dialogue npc_text; 
     sprite npc_sprite;
     trainer* trainer_npc;
 };
