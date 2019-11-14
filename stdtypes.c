@@ -42,3 +42,33 @@ void string_set_cstr(string* str, char* cstr) {
     str->str = realloc(str->str, str->strlen);
     strcpy(str->str, cstr);
 }
+
+void color_init(color* color_obj, char r, char g, char b) {
+    color_obj->red = r;
+    color_obj->green = g;
+    color_obj->blue = b;
+}
+
+char color_get_red(color* color_obj) {
+    return color_obj->red;
+}
+
+char color_get_green(color* color_obj) {
+    return color_obj->green;
+}
+
+char color_get_blue(color* color_obj) {
+    return color_obj->blue;
+}
+
+void color_set_red(color* color_obj, char red) {
+    color_obj->red = red;
+}
+
+void color_set_green(color* color_obj, char green) {
+    color_obj->green = green;
+}
+
+void color_set_blue(color* color_obj, char blue) {
+    color_obj->blue = blue;
+}
