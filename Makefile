@@ -3,13 +3,15 @@ CCFLAGS := #
 
 TARGETS	:= main
 MAINS := $(addsuffix .o, $(TARGETS))
-OBJS := utils.o # additional .o
+OBJS := utils.o stdtypes.o # additional .o
 LIBS := -pthread -lSDL2 #-w -lSDL2
 
 all: $(TARGETS)
 
 utils.o: 
-	$(CC) $(CCFLAGS) utils.o -c utils.c
+	$(CC) $(CCFLAGS) -c utils.c
+stdtypes.o:
+	$(CC) $(CCFLAGS) -c stdtypes.c
 
 clean:
 	rm -f $(TARGETS) $(OBJS)

@@ -1,6 +1,3 @@
-typedef struct position position;
-typedef struct string string;
-typedef struct color color;
 typedef struct gamestate gamestate;
 typedef struct area area;
 typedef struct map_areas map_areas;

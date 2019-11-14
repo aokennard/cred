@@ -8,6 +8,9 @@
 int main(int argc, char* argv[]) {
     int32_t horizontal_res = DEFAULT_HORIZONTAL_RES;
     int32_t vertical_res = DEFAULT_VERTICAL_RES;
+    string dialogue_fn;
+    string graphic_fn;
+    string map_fn;
 
     printf("%d arguments passed in\n", argc - 1);
 

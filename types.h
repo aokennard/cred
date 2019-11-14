@@ -1,13 +1,14 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include "stdtypes.h"
 #include "constants.h"
 #include "typedefs.h"
 
 // TODO globals needed: 
 // char* array of all dialogue strings - mmap'd
 // gamestate structure
-// sprites? - mmap'd ? 
+// graphics? - mmap'd  
 // map_areas - mmap'd
 
 /*
@@ -17,22 +18,6 @@
 typedef enum {
     NORMAL, FIRE, WATER, ELECTRIC, GRASS, ICE, FIGHTING, POISON, GROUND, FLYING, PSYCHIC, BUG, ROCK, GHOST, DRAGON
 } pokemon_type;
-
-struct position {
-    int x;
-    int y;
-};
-
-struct string {
-    char* str;
-    int strlen;
-};
-
-struct color {
-    char red;
-    char green;
-    char blue;
-};
 
 /*
     Stores not seen stats for a pokemon
