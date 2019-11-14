@@ -1,16 +1,14 @@
-#include "constants.h"
+#ifndef TYPES_H
+#define TYPES_H
 
+#include "constants.h"
 #include "typedefs.h"
 
-// TODO globals needed:
-// char* array of all dialogue strings
+// TODO globals needed: 
+// char* array of all dialogue strings - mmap'd
 // gamestate structure
-// sprites?
-// map_areas
-
-
-
-
+// sprites? - mmap'd ? 
+// map_areas - mmap'd
 
 /*
     Current pokemon / move types -- make a lookup table for weaknesses
@@ -188,10 +186,11 @@ struct badge {
     Stores data about a sprite for some object
     Contains the index into the list of all sprites, the direction it might be in (if relevant), and the data for the sprite
 */
-struct sprite {
-    int sprite_index; // this, or just a bit array / image?
-    int sprite_direction; // up down left right, can be used as an offset from sprite_index to get directional sprite
-    sprite_data* sprite_data_ptr; // just update ptr when changing things
+struct graphic_tile {
+    int graphic_index; // this, or just a bit array / image?
+    int graphic_direction; // up down left right, can be used as an offset from sprite_index to get directional sprite
+    int is_tile; 
+    graphic_data* graphic_data_ptr; // just update ptr when changing things
 };
 
 /*
@@ -205,7 +204,7 @@ struct npc {
     int line_of_sight; // how far they can see for walking to challenge - used when building tiles?
     position npc_position;
     dialogue npc_text; 
-    sprite npc_sprite;
+    graphic_tile npc_sprite;
     trainer* trainer_npc;
 };
 
@@ -215,7 +214,7 @@ struct npc {
     Can be encounter tile thats passive or something that you can click on
 */
 struct tile {
-    sprite tile_sprite;
+    graphic_tile tile_sprite;
     int collisions;
     void (*passive_interact)(gamestate* current_state); // encounter tiles and the like
     dialogue (*tile_interact)(gamestate* current_state); // when clicking on tile: might output a message, or do nothing if background
@@ -281,15 +280,17 @@ struct gamestate {
 /*
     Stores a given sprites color data at the defined resolution
 */
-struct sprite_data {
-    color sprite_colors[TILE_X_SIZE][TILE_Y_SIZE];
+struct graphic_data {
+    color graphic_colors[TILE_X_SIZE][TILE_Y_SIZE];
 };
 
 /*
-    Stores all the sprites for tiles and characters alike
+    Stores all the graphics for tiles and characters alike
     Should be loaded in from file, never changes
 */
-struct sprites {
-    sprite_data game_sprites[MAX_SPRITES]; // TODO VLA
+struct graphics {
+    graphic_data game_sprites[MAX_SPRITES]; 
+    graphic_data game_tiles[MAX_TILES];
 };
 
+#endif
