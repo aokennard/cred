@@ -29,6 +29,10 @@ void string_init(string* str_obj, char* str) {
     strcpy(str_obj->str, str);
 }
 
+void string_destroy(string* str_obj) {
+    free(str_obj->str);
+}
+
 char* string_get_cstr(string* str) {
     return str->str;
 }
