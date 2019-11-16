@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     string_init(&graphic_fn, GRAPHICS_FN);
     string_init(&map_fn, MAP_FN);
 
-    printf("%d arguments passed in\n", argc - 1);
+    printf("%d arguments passed in\n", (argc - 1)  / 2);
 
     int opt;
 
@@ -58,15 +58,22 @@ int main(int argc, char* argv[]) {
     printf("Done arg parsing, launching\n");
 
     int graphic_ret = 0;
-    
+
     if((graphic_ret = init_graphics_mode())) {
         printf("Failed launching graphics with code %d\n", graphic_ret);
         return -1;
     }
 
+    video_buffer* vidmem = create_window(horizontal_res, vertical_res);
+    scale_video_buffer(vidmem, horizontal_res, vertical_res); // hmm
+
+    
+    sleep(5);
     
 
     string_destroy(&map_fn);
     string_destroy(&graphic_fn);
     string_destroy(&dialogue_fn);
+
+    destroy_window(vidmem);
 }

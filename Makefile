@@ -2,11 +2,13 @@ CC:= gcc
 CCFLAGS := #
 
 TARGETS	:= main
+UTILS := utils.c stdtypes.c graphics.c sdl/sdlgraphics.c
 MAINS := $(addsuffix .o, $(TARGETS))
 OBJS := utils.o stdtypes.o # additional .o
-LIBS := -pthread -lSDL2 #-w -lSDL2
+LIBS := -pthread -lSDL #-w -lSDL2
 
-all: $(TARGETS)
+all: #$(TARGETS)
+	gcc -g main.c $(UTILS) -o main $(LIBS)
 
 utils.o: 
 	$(CC) $(CCFLAGS) -c utils.c
