@@ -5,7 +5,7 @@ TARGETS	:= main
 UTILS := utils.c stdtypes.c graphics.c sdl/sdlgraphics.c
 MAINS := $(addsuffix .o, $(TARGETS))
 OBJS := utils.o stdtypes.o # additional .o
-LIBS := -pthread -lSDL #-w -lSDL2
+LIBS := -pthread -lSDL2 #-w -lSDL2
 
 all: #$(TARGETS)
 	gcc -g main.c $(UTILS) -o main $(LIBS)

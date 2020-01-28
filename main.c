@@ -65,10 +65,10 @@ int main(int argc, char* argv[]) {
     }
 
     video_buffer* vidmem = create_window(horizontal_res, vertical_res);
-    scale_video_buffer(vidmem, horizontal_res, vertical_res); // hmm
+    //scale_video_buffer(vidmem, horizontal_res, vertical_res); // hmm
+    show_text_window(vidmem, 0, 0, 20, 20);//horizontal_res / 2, vertical_res / 2, 20, 20); 
 
-    
-    sleep(5);
+    sleep(3);
     
 
     string_destroy(&map_fn);
